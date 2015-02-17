@@ -1,3 +1,13 @@
+// ==UserScript==
+// @name         My Fancy New Userscript
+// @namespace    http://your.homepage/
+// @version      0.1
+// @description  enter something useful
+// @author       You
+// @match        http://*.hkgolden.com/*
+// @grant        none
+// @require      https://code.jquery.com/jquery-2.1.3.min.js
+// ==/UserScript==
 	var css_style = "\
 	<style>\
 		.TopicBox_Author{\
@@ -34,17 +44,18 @@ $( document ).ready(function() {
 	}
 	$('body').append(css_style);
 
-	$('.TopicAd,.TopicBox_PageSelect').remove();
+	$('.TopicAd,.TopicBox_PageSelect,iframe').remove();
 	$('.Image').click();
 	$('.View_PageSelectPanel').append('<div class="custom_contorl"></div>');
 	$('.custom_contorl').append('<div class="image_count">' + $('.Image').length  + '</div>');
 	var post_id = $.urlParam('message'); 
-	var ajax_count = 0 + $('.View_PageSelect option[selected]').next().val();
+	var ajax_count = 0 + parseInt($('.View_PageSelect option[selected]').next().val());
+    var subdomain = document.location.host.substr(0,document.location.host.indexOf('.'));
 	ajax_preload_post();
 
 	function ajax_preload_post(){
 		$.ajax({
-		url: 'http://m1.hkgolden.com/view.aspx?message=' + post_id + '&page=' + ajax_count,
+		url: 'http://'+subdomain+'.hkgolden.com/view.aspx?message=' + post_id + '&page=' + ajax_count,
 	})
 	.done(function(data) {
 		$(data).find('.ReplyBox').each(function(index,ajax_txt){
@@ -71,3 +82,4 @@ $( document ).ready(function() {
 	});
 	}
 });
+
